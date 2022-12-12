@@ -14,6 +14,9 @@ module.exports = function (app) {
         })
 
     app.post('/v1/desktop/upload-crash-logs',
+    (req, res, next) => {
+        console.log('called /v1/desktop'); // TODO: log!
+    },
         (req, res, next) => {
             logger.info({ msg: 'desktop crash upload API ' + req.url + 'called' });
             next();

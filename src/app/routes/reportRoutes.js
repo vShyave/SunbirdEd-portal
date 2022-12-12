@@ -134,23 +134,35 @@ module.exports = function (app) {
     app.get('/courseReports/:slug/:filename',
         proxyUtils.verifyToken(),
         reportHelper.validateRoles(['CONTENT_CREATOR']),
+        (req, res, next) => {
+        console.log('called reporrts 1'); // TODO: log!
+    },
         StorageService.CLOUD_CLIENT.fileReadStream(envHelper.sunbird_aws_reports));
 
     app.get('/course-reports/metadata',
         proxyUtils.verifyToken(),
         reportHelper.validateRoles(['CONTENT_CREATOR', 'REPORT_VIEWER', 'REPORT_ADMIN', 'ORG_ADMIN']),
+        (req, res, next) => {
+        console.log('called reporrts 2'); // TODO: log!
+    },
         StorageService.CLOUD_CLIENT.getFileProperties(envHelper.sunbird_aws_reports)
         );
 
     app.get(`/reports/fetch/:slug/:filename`,
         proxyUtils.verifyToken(),
         reportHelper.validateRoles(['REPORT_VIEWER', 'REPORT_ADMIN','PROGRAM_DESIGNER','PROGRAM_MANAGER']),
+        (req, res, next) => {
+        console.log('called reporrts 3'); // TODO: log!
+    },
         StorageService.CLOUD_CLIENT.fileReadStream(envHelper.sunbird_aws_reports));
 
     app.get('/reports/:slug/:filename',
         proxyUtils.verifyToken(),
         reportHelper.validateSlug(['public']),
         reportHelper.validateRoles(['ORG_ADMIN', 'REPORT_VIEWER', 'REPORT_ADMIN','PROGRAM_DESIGNER','PROGRAM_MANAGER']),
+        (req, res, next) => {
+        console.log('called reporrts 4'); // TODO: log!
+    },
         StorageService.CLOUD_CLIENT.fileReadStream(envHelper.sunbird_aws_reports));
 
     app.get('/admin-reports/:slug/:filename',
@@ -158,6 +170,9 @@ module.exports = function (app) {
         reportHelper.validateSlug(['geo-summary', 'geo-detail', 'geo-summary-district', 'user-summary', 'user-detail',
             'validated-user-summary', 'validated-user-summary-district', 'validated-user-detail', 'declared_user_detail']),
         reportHelper.validateRoles(['ORG_ADMIN']),
+        (req, res, next) => {
+        console.log('called reporrts 5'); // TODO: log!
+    },
         StorageService.CLOUD_CLIENT.fileReadStream(envHelper.sunbird_aws_reports));
 
     app.get(`${BASE_REPORT_URL}/dataset/get/:datasetId`,
