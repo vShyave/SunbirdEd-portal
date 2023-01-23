@@ -152,6 +152,10 @@ export class AppComponent implements OnInit, OnDestroy {
       document.documentElement.setAttribute('layout', 'base');
     }
   }
+
+  ngAfterContentChecked(): void {
+    this.changeDetectorRef.detectChanges();
+  }  
   
   /**
    * dispatch telemetry window unload event before browser closes
