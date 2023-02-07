@@ -24,6 +24,8 @@ export class ContentTypeComponent implements OnInit, OnDestroy {
   subscription: any;
   userType: any;
   returnTo: string;
+  userRole:any;
+
   constructor(
     public formService: FormService,
     public resourceService: ResourceService,
@@ -140,7 +142,8 @@ export class ContentTypeComponent implements OnInit, OnDestroy {
       if (this.userService.loggedIn) {
         this.userService.userData$.pipe(takeUntil(this.unsubscribe$)).subscribe((profileData: IUserData) => {
           if (_.get(profileData, 'userProfile.profileUserType.type')) {
-          this.userType = profileData.userProfile['profileUserType']['type'];
+            this.userType = profileData.userProfile['profileUserType']['type'];
+            this.userRole = profileData.userProfile['roles'].length ? profileData.userProfile['roles'][0]['role'] : '';
           }
           this.makeFormChange();
         });
@@ -160,10 +163,19 @@ export class ContentTypeComponent implements OnInit, OnDestroy {
   }
   makeFormChange() {
     const index = this.contentTypes.findIndex(cty => cty.contentType === 'observation');
+    const studentIndex = this.contentTypes.findIndex(cty => cty.contentType === 'piaassessment');
+    const nodalIndex = this.contentTypes.findIndex(cty => cty.contentType === 'workspace')
     if (this.userType != 'administrator') {
       this.contentTypes[index].isEnabled = false;
     } else {
       this.contentTypes[index].isEnabled = true;
+    }
+
+    if(this.userType != 'student' && studentIndex!=-1) {
+      this.contentTypes[studentIndex].isEnabled = false;
+    }
+    if(this.userRole!= 'NODAL_OFFICER' && nodalIndex!=-1) {
+      this.contentTypes[nodalIndex].isEnabled = false
     }
   }
 
